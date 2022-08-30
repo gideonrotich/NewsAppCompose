@@ -16,10 +16,8 @@ class GetNewsUseCase @Inject constructor(
     operator fun invoke(country:String):Flow<Resource<List<News>>> = flow{
         try {
             emit(Resource.Loading())
-//            val list = repository.getNews(country).map { it.toNews() }
-            val mimi = repository.getNews(country)
-            val mimitwo = if (mimi.articles != null)mimi.articles.map { it -> it.toNews() } else emptyList()
-            emit(Resource.Success(mimitwo))
+            val news = repository.getNews(country).articles.map { it.toNews() }
+            emit(Resource.Success(news))
         }catch (e: HttpException){
             emit(Resource.Error(e.localizedMessage ?: "Error"))
         }catch (e: IOException){
